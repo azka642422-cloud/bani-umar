@@ -1,109 +1,44 @@
 import React, { useState } from 'react';
 import confetti from 'canvas-confetti';
-import { branchesData } from './data/branches';
-import { memoriesData } from './data/memories';
-import { funFactsData } from './data/funFacts';
-import { BranchData } from './types';
-import { NavbarBaniUmar } from './components/NavbarBaniUmar';
-import { AudioController } from './components/AudioController';
-import { SceneOpening } from './components/sections/SceneOpening';
-import { BranchExplorer } from './components/sections/BranchExplorer';
-import { StoryDioramaView } from './components/sections/StoryDioramaView';
-import { FunnyMemoriesSection } from './components/sections/FunnyMemoriesSection';
-import { ThenNowSection } from './components/sections/ThenNowSection';
-import { TimelineGatheringSection } from './components/sections/TimelineGatheringSection';
-import { SurpriseMeModal } from './components/sections/SurpriseMeModal';
-import { FinalSceneBaniUmar } from './components/sections/FinalSceneBaniUmar';
+import { CinematicMemoryPrototype } from './components/prototype/CinematicMemoryPrototype';
 
 export default function App() {
-  const [currentView, setCurrentView] = useState<'opening' | 'branches' | 'diorama' | 'funfacts' | 'thennow' | 'timeline' | 'final'>('opening');
-  const [selectedBranch, setSelectedBranch] = useState<BranchData | null>(null);
-  const [isSurpriseOpen, setIsSurpriseOpen] = useState(false);
+  const [isApproved, setIsApproved] = useState(false);
 
-  const handleStartStory = () => {
+  const handleApprove = () => {
     confetti({
-      particleCount: 90,
-      spread: 80,
-      origin: { y: 0.6 },
-      colors: ['#ff7a59', '#ffb703', '#3a86ff', '#b5179e', '#4cc9f0']
-    });
-    setCurrentView('branches');
-  };
-
-  const handleSelectBranch = (branch: BranchData) => {
-    setSelectedBranch(branch);
-    setCurrentView('diorama');
-  };
-
-  const handleReplay = () => {
-    confetti({
-      particleCount: 100,
-      spread: 90,
+      particleCount: 120,
+      spread: 100,
       origin: { y: 0.5 },
-      colors: ['#ff7a59', '#ffb703', '#3a86ff']
+      colors: ['#dd5230', '#fef3c7', '#52796f', '#8d5b4c']
     });
-    setCurrentView('opening');
-    setSelectedBranch(null);
+    setIsApproved(true);
   };
+
+  if (isApproved) {
+    return (
+      <div className="min-h-screen bg-[#141210] text-[#fcfaf7] flex items-center justify-center p-6 text-center">
+        <div className="max-w-md space-y-6 glass-panel p-8 rounded-3xl border border-white/15 shadow-2xl">
+          <div className="w-16 h-16 rounded-full bg-[#dd5230]/20 flex items-center justify-center mx-auto text-[#dd5230] text-2xl font-bold">
+            ✓
+          </div>
+          <h2 className="text-2xl font-bold text-[#fcfaf7]">Arah Visual Disetujui!</h2>
+          <p className="text-sm text-[#fcfaf7]/80">
+            Terima kasih! Visual direction, palette, lighting, dan mobile safeguards telah disetujui. Anda dapat memberikan instruksi selanjutnya untuk melanjutkan pembangunan penuh seluruh website Bani Umar.
+          </p>
+          <button
+            onClick={() => setIsApproved(false)}
+            className="px-6 py-3 rounded-full bg-[#1c1815] border border-white/20 text-xs text-[#fcfaf7]/70 hover:text-white"
+          >
+            Kembali ke Prototype Review
+          </button>
+        </div>
+      </div>
+    );
+  }
 
   return (
-    <div className="min-h-screen bg-[#0b0c16] text-white selection:bg-[#ff7a59] selection:text-white relative">
-      <NavbarBaniUmar
-        onOpenSurprise={() => setIsSurpriseOpen(true)}
-        onReset={() => setCurrentView('opening')}
-      />
-
-      <AudioController />
-
-      <main className="pt-16">
-        {currentView === 'opening' && (
-          <SceneOpening
-            branches={branchesData}
-            onStartStory={handleStartStory}
-            onSelectBranch={handleSelectBranch}
-          />
-        )}
-
-        {currentView === 'branches' && (
-          <div className="space-y-0">
-            <BranchExplorer
-              branches={branchesData}
-              onSelectBranch={handleSelectBranch}
-            />
-            <FunnyMemoriesSection funFacts={funFactsData} />
-            <ThenNowSection />
-            <TimelineGatheringSection />
-            <div className="py-16 text-center">
-              <button
-                onClick={() => setCurrentView('final')}
-                className="px-8 py-4 rounded-full font-bold text-white bg-gradient-to-r from-[#ff7a59] via-[#ffb703] to-[#3a86ff] shadow-xl hover:opacity-90 transition-all"
-              >
-                Enter Final Sanctuary →
-              </button>
-            </div>
-          </div>
-        )}
-
-        {currentView === 'diorama' && selectedBranch && (
-          <StoryDioramaView
-            branch={selectedBranch}
-            memories={memoriesData}
-            onBack={() => setCurrentView('branches')}
-          />
-        )}
-
-        {currentView === 'final' && (
-          <FinalSceneBaniUmar
-            branches={branchesData}
-            onReplay={handleReplay}
-          />
-        )}
-      </main>
-
-      <SurpriseMeModal
-        isOpen={isSurpriseOpen}
-        onClose={() => setIsSurpriseOpen(false)}
-      />
-    </div>
+    <CinematicMemoryPrototype onApprove={handleApprove} />
   );
 }
+
