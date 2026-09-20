@@ -1,0 +1,6 @@
+{
+  "name": "Bani Umar — 7 Branches, Countless Stories",
+  "description": "An interactive 3D family storytelling experience celebrating the journey, memories, and countless stories of Bani Umar.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
